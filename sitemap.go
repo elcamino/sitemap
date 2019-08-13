@@ -7,9 +7,10 @@ package sitemap
 
 import (
 	"encoding/xml"
-	"github.com/snabb/diagio"
 	"io"
 	"time"
+
+	"github.com/snabb/diagio"
 )
 
 // ChangeFreq specifies change frequency of a sitemap entry. It is just a string.
@@ -27,13 +28,31 @@ const (
 	Never   ChangeFreq = "never"
 )
 
+// DateTime is used to parse only the date part of a sitemap timestamp
+type DateTime struct {
+	time.Time
+}
+
+// UnmarshalXML parses the time
+func (dt *DateTime) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	const shortForm = "2006-01-02" // yyyy-mm-dd date format
+	var v string
+	d.DecodeElement(&v, &start)
+	parse, err := time.Parse(shortForm, v)
+	if err != nil {
+		return err
+	}
+	*dt = DateTime{parse}
+	return nil
+}
+
 // URL entry in sitemap or sitemap index. LastMod is a pointer
 // to time.Time because omitempty does not work otherwise. Loc is the
 // only mandatory item. ChangeFreq and Priority must be left empty when
 // using with a sitemap index.
 type URL struct {
 	Loc        string     `xml:"loc"`
-	LastMod    *time.Time `xml:"lastmod,omitempty"`
+	LastMod    *DateTime  `xml:"lastmod,omitempty"`
 	ChangeFreq ChangeFreq `xml:"changefreq,omitempty"`
 	Priority   float32    `xml:"priority,omitempty"`
 }
