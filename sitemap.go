@@ -36,9 +36,16 @@ type DateTime struct {
 // UnmarshalXML parses the time
 func (dt *DateTime) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	const shortForm = "2006-01-02" // yyyy-mm-dd date format
+	const longForm = "2006-01-02T15:04:05Z07:00"
+
+	timeFormat := shortForm
 	var v string
 	d.DecodeElement(&v, &start)
-	parse, err := time.Parse(shortForm, v)
+
+	if len(v) > 11 {
+		timeFormat = longForm
+	}
+	parse, err := time.Parse(timeFormat, v)
 	if err != nil {
 		return err
 	}
