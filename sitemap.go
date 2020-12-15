@@ -53,6 +53,13 @@ func (dt *DateTime) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	return nil
 }
 
+// MarshalXML formats the time according to https://www.w3.org/TR/NOTE-datetime
+func (dt *DateTime) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	var s string
+	s = dt.Format(time.RFC3339)
+	return e.EncodeElement(s, start)
+}
+
 // URL entry in sitemap or sitemap index. LastMod is a pointer
 // to time.Time because omitempty does not work otherwise. Loc is the
 // only mandatory item. ChangeFreq and Priority must be left empty when

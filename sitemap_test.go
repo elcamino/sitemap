@@ -1,14 +1,14 @@
 package sitemap_test
 
 import (
-	"github.com/snabb/sitemap"
+	"github.com/elcamino/sitemap"
 	"os"
 	"time"
 )
 
 func Example() {
 	sm := sitemap.New()
-	t := time.Unix(0, 0).UTC()
+	t := sitemap.DateTime{Time: time.Unix(0, 0).UTC()}
 	sm.Add(&sitemap.URL{
 		Loc:        "http://example.com/",
 		LastMod:    &t,
