@@ -59,7 +59,7 @@ func (dt *DateTime) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 // using with a sitemap index.
 type URL struct {
 	Loc        string     `xml:"loc"`
-	LastMod    *time.Time `xml:"lastmod,omitempty"`
+	LastMod    *DateTime  `xml:"lastmod,omitempty"`
 	ChangeFreq ChangeFreq `xml:"changefreq,omitempty"`
 	Priority   float32    `xml:"priority,omitempty"`
 }
